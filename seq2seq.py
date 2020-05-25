@@ -92,32 +92,39 @@ def extractSentencePairs(conversations):
                 qa_pairs.append([inputLine, targetLine])
     return qa_pairs
 
-# 定义新文件的路径
-datafile = os.path.join(corpus, 'formatted_movie_lines.txt')
 
-delimiter = '\t'
-# Unescape the delimiter
-delimiter = str(codecs.decode(delimiter, "unicode_escape"))
 
-# 初始化lines字典，对话集合，属性值
-lines = {}
-conversations = []
-MOVIE_LINES_FIELDS = ["lineID", "characterID", "movieID", "character", "text"]
-MOVIE_CONVERSATIONS_FIELDS = ["character1ID", "character2ID", "movieID", "utteranceIDs"]
+def data_processs():
+    """数据预处理并保存对话数据"""
+    # 定义新文件的路径
+    datafile = os.path.join(corpus, 'formatted_movie_lines.txt')
 
-# 加载字典和处理对话集合
-print("\nProcessing corpus...")
-lines = loadLines(os.path.join(corpus, "movie_lines.txt"), MOVIE_LINES_FIELDS)
-print("\nLoading conversations...")
-conversations = loadConversations(os.path.join(corpus, "movie_conversations.txt"),
-                                  lines, MOVIE_CONVERSATIONS_FIELDS)
-# 写入到csv文件
-print("\nWriting newly formatted file..")
-with open(datafile, 'w', encoding='utf-8') as outputfile:
-    writer = csv.writer(outputfile, delimiter= delimiter, lineterminator='\n')
-    for pair in extractSentencePairs(conversations):
-        writer.writerow(pair)
+    delimiter = '\t'
+    # Unescape the delimiter
+    delimiter = str(codecs.decode(delimiter, "unicode_escape"))
 
-# 打印一些数据显示
-print('\nSample lines from file:')
-printLines(datafile)
+    # 初始化lines字典，对话集合，属性值
+    lines = {}
+    conversations = []
+    MOVIE_LINES_FIELDS = ["lineID", "characterID", "movieID", "character", "text"]
+    MOVIE_CONVERSATIONS_FIELDS = ["character1ID", "character2ID", "movieID", "utteranceIDs"]
+
+    # 加载字典和处理对话集合
+    print("\nProcessing corpus...")
+    lines = loadLines(os.path.join(corpus, "movie_lines.txt"), MOVIE_LINES_FIELDS)
+    print("\nLoading conversations...")
+    conversations = loadConversations(os.path.join(corpus, "movie_conversations.txt"),
+                                    lines, MOVIE_CONVERSATIONS_FIELDS)
+    # 写入到csv文件
+    print("\nWriting newly formatted file..")
+    with open(datafile, 'w', encoding='utf-8') as outputfile:
+        writer = csv.writer(outputfile, delimiter= delimiter, lineterminator='\n')
+        for pair in extractSentencePairs(conversations):
+            writer.writerow(pair)
+
+    # 打印一些数据显示
+    print('\nSample lines from file:')
+    printLines(datafile)
+
+if __name__ == "__main__":
+    data_processs()
